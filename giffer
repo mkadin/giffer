@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+import sqlite3dbm
+import argparse
+import os
+
+
+DB = os.path.expanduser("~/.giffer/gifs.db")
+
+def main(key=None, value=None):
+  db = sqlite3dbm.sshelve.open(DB)
+
+  if value:
+    db[key] = value
+    print "%s has been saved." % key
+  else:
+    if key:
+      result = db.get(key)
+
+      if not result:
+        print "Not found"
+        return
+
+      print "%s has been copied to the clipboard" % result"
+      cmd = 'echo %s | tr -d "\n" | pbcopy' % result
+      os.system(cmd)
+    else:
+      print "All Available GIFS:"
+      keys = db.keys()
+      keys.sort()
+      for key in keys:
+        print key
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='Process some integers.')
+  parser.add_argument('topic', nargs='?', help='The topic that the gif is relevant to')
+  parser.add_argument('url', nargs='?', help='optional - the url to store for this gif')
+  args = parser.parse_args()
+  main(args.topic, args.url)
