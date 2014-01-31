@@ -20,7 +20,7 @@ def main(key=None, value=None):
         print "Not found"
         return
 
-      print "%s has been copied to the clipboard" % result"
+      print "%s has been copied to the clipboard" % result
       cmd = 'echo %s | tr -d "\n" | pbcopy' % result
       os.system(cmd)
     else:
